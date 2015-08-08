@@ -1,0 +1,8 @@
+web:
+  image: maksimsemenov/sails
+  ports:
+    - "80:1337"
+  volumes:
+    - ./src:/code
+  working_dir: /code
+  command: sails lift
