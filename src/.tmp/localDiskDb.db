@@ -1,0 +1,41 @@
+{
+  "data": {
+    "word": [
+      {
+        "word": "прощание",
+        "lang": "rus",
+        "createdAt": "2015-08-09T23:51:38.201Z",
+        "updatedAt": "2015-08-09T23:51:38.201Z",
+        "id": 1
+      },
+      {
+        "word": "прощание",
+        "lang": "rus",
+        "createdAt": "2015-08-09T23:52:58.791Z",
+        "updatedAt": "2015-08-09T23:52:58.791Z",
+        "id": 2
+      }
+    ]
+  },
+  "schema": {
+    "word": {
+      "id": {
+        "type": "integer",
+        "autoIncrement": true,
+        "primaryKey": true,
+        "unique": true
+      },
+      "createdAt": {
+        "type": "datetime"
+      },
+      "updatedAt": {
+        "type": "datetime"
+      }
+    }
+  },
+  "counters": {
+    "word": {
+      "id": 2
+    }
+  }
+}

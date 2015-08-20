@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<title></title>
+<script type="text/javascript">
+	var languageFrom = "en";
+	var languageTo = "ru";
+	var text = "mole";
+	var options = "{\"User\":\"TestUserId\"}";
+	function getTranslations() {
+		PageMethods.GetAccessToken(OnSucceeded, OnFailed);
+	}
+	function OnSucceeded(result, usercontext, methodName) {
+
+		window.mycallback = function (response) {
+			var array = response.Translations;
+			var translations = "Available translations for source text '" + text + "' are <br />";
+			for (var i = 0; i < array.length; i++) {
+				translations = translations + "Translated text: " + array[i].TranslatedText + "<br />Rating: " + array[i].Rating + "<br />Count: " + array[i].Count + "<br /><br />";
+			}
+			document.getElementById('<%= lblResult.ClientID %>').innerHTML = translations;
+		}
+
+		var s = document.createElement("script");
+		s.src = "http://api.microsofttranslator.com/V2/Ajax.svc/GetTranslations?oncomplete=mycallback&appId=Bearer " + encodeURIComponent(result.access_token) + "&text=" + encodeURIComponent(text) + "&from=" + languageFrom +
+		"&to=" + languageTo + "&maxTranslations=5&options=" + options;
+		document.getElementsByTagName("head")[0].appendChild(s);
+	}
+	function OnFailed(error, userContext, methodName) {
+		alert("Error");
+	}
+
+</script>
+</head>
+<body>
+<form id="form1" runat="server">
+
+</form>
+</body>
+</html>

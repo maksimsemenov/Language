@@ -1,0 +1,43 @@
+{
+	"manifest_version": 2,
+	"name": "WordsTranslate",
+	"version": "0.01.00",
+	
+	"default_locale": "en",
+	"description": "Select a word and translate it to your native language",
+	"icons": {"16": "img/16.png",
+			  "128": "img/128.png"
+			 },
+	
+	"browser_action": {
+		"default_icon": {"19": "img/19.png",
+						 "38": "img/38.png"
+						},
+		"default_title": "Translate",
+		"default_popup": "popup.html"
+	},
+	
+	"background": {
+		"scripts": ["app.js"],
+		"persistent": false
+	},
+	
+	"permissions": [
+		"activeTab",
+		"clipboardRead",
+		"contextMenus",
+		"storage",
+		"https://*.yandex.net/"
+		],
+	
+	"commands": {
+		"translate": {
+			"suggested_key": {
+				"default": "Alt+T",
+				"mac": "Alt+T"
+			},
+			"description": "Translate selected text"
+		}
+	}
+}
+	
