@@ -5,17 +5,11 @@ var API_KEY = "dict.1.1.20150811T012634Z.9abd255c392b2e10.67ddcf04c4b2af8508c1d8
 var API_URL = "https://dictionary.yandex.net/api/v1/dicservice.json/lookup";
 
 
-chrome.commands.onCommand.addListener(function(command) {
-	console.log('Command:', command);
-	chrome.tabs.executeScript(null, {file: "translate.js"});
+chrome.commands.onCommand.addListener(function() {
 	chrome.tabs.insertCSS(null, {file: "translateTooltip.css"});
+	chrome.tabs.executeScript(null, {file: "translate.js"});	
 });
-/*chrome.runtime.onConnect.addListener(function(port) {
-	port.onMessage.addListener(function(msg) {
-		console.log(msg);
-		port.postMessage({response: msg});
-	});
-});*/
+
 chrome.runtime.onConnect.addListener(connectionHandler);
 
 function connectionHandler(port) {
@@ -36,7 +30,7 @@ function connectionHandler(port) {
 		httpRequest.open("GET", requestData, true);
 		httpRequest.send(null);
 	}
-		
+	
 	port.onMessage.addListener(translate);
 }
 

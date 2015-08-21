@@ -7,13 +7,13 @@ var port = chrome.runtime.connect();
 port.postMessage(window.getSelection().toString());
 port.onMessage.addListener(handleResponse);
 
+document.body.addEventListener("click", clickHandler, false);
 
 var range = window.getSelection().getRangeAt(0),
 	rangeRect = range.getBoundingClientRect();
 
 function handleResponse(response) {
-	if (response.def) {
-		
+	if (response.def && response.def.length !==0) {
 		createTooltipNode(response.def);	
 	}
 	else {
@@ -30,18 +30,18 @@ function createSectionTranslationsNode(translations) {
 	trString = trString.slice(0,1).toUpperCase() + trString.slice(1,-2);
 	
 	var sectionTranslation = document.createElement("p");
-	sectionTranslation.classList.add("tooltip__sectionTranslation");
+	sectionTranslation.classList.add("translate_tooltip__sectionTranslation");
 	sectionTranslation.appendChild(document.createTextNode(trString));
 	
 	return sectionTranslation;
 }
 function createSectionNode(section) {
 	var sectionNode = document.createElement("div");
-	sectionNode.classList.add("tooltip__section");
+	sectionNode.classList.add("translate_tooltip__section");
 	
 	if (section.pos) {
 		var sectionTitle = document.createElement("p");
-		sectionTitle.classList.add("tooltip__sectionTitle");
+		sectionTitle.classList.add("translate_tooltip__sectionTitle");
 		sectionTitle.appendChild(document.createTextNode(section.pos));
 		sectionNode.appendChild(sectionTitle);
 	}
@@ -50,8 +50,12 @@ function createSectionNode(section) {
 	return sectionNode;
 }
 function createTooltipNode(defs) {
+	if (document.getElementById("translateTooltip")) {
+		document.getElementById("translateTooltip").parentNode.removeChild(document.getElementById("translateTooltip"));
+	}
 	var tooltip = document.createElement("div");
-	tooltip.classList.add("tooltip");
+	tooltip.classList.add("translate_tooltip", "translate_tooltip-hidden");
+	tooltip.id = "translateTooltip";
 	document.body.appendChild(tooltip);
 
 	for (var i=0, def; i<defs.length; i++) {
@@ -60,20 +64,27 @@ function createTooltipNode(defs) {
 	}
 	
 	var bodyRect = document.body.getBoundingClientRect();
+	var tooltipRect = tooltip.getBoundingClientRect();
 
 	var w = tooltip.style.width = 160;
-	var h = tooltip.style.height;
 	var x = rangeRect.left - (w - rangeRect.width)/2;
-	var y = rangeRect.top - h - 10;
+	var y = rangeRect.top - tooltipRect.height - 10;
+	if (y<0) {y = rangeRect.top + rangeRect.height + 10;}
+	var top = window.scrollY + y;
+	var left = x+w+30>bodyRect.width ? bodyRect.width-w-30 : x;
 	
-	tooltip.style.left = x+w+30>bodyRect.width ? bodyRect.width-w-30 : x;
-	tooltip.style.top = y<0 ? rangeRect.top + rangeRect.height + 10 : y;	
+	tooltip.style.left = left + "px";
+	tooltip.style.top = top + "px";
+	
 
-	console.log(tooltip.getBoundingClientRect(), bodyRect, rangeRect);
-	
-	
-	
-	return tooltip;
+	console.log(window.scrollY, tooltipRect, bodyRect, rangeRect);	
+	tooltip.classList.remove("translate_tooltip-hidden");
+}
+
+function clickHandler(event) {
+	if (event.target != document.getElementById("translateTooltip") && document.getElementById("translateTooltip")) {
+		document.body.removeChild(document.getElementById("translateTooltip"));
+	}
 }
 	
 	
