@@ -1,47 +1,111 @@
-.translate_tooltip {
-	font-family: "lucida grande", Arial, Helvetica, sans-serif;
+@import url(http://fonts.googleapis.com/css?family=Fira+Sans&subset=latin,cyrillic);
+
+.tr_t {
+	font-family: 'Fira Sans', sans-serif;
 	position: absolute;
 	width: 160px;
+	height: 300px;
 	z-index: 9999999;
-	background-color: white;
-	opacity: 0.99;
-	box-shadow: 0 2px 6px 0 rgba(0,0,0,0.3);
+	opacity: 1;	
+	transition: 0.3s ease-in;
+}
+.tr_t__tb {
+	position: absolute;
+	width: 100%;
+	min-height: 50px;
+	max-height: 100%;
+	background-color: #fefefe;
+	box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
 	
-	display: block;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	
+
 	border-radius: 2px;
+	padding: 15px 12px 5px 12px;
+}
 	
-	transition: 0.5s ease-out;
+.tr_t__tb-bottom {
+	bottom: 0;
+}
+.tr_t__tb-top {
+	top: 0;
 }
 
-.translate_tooltip-hidden {
+.tr_t-hidden {
 	opacity: 0;
-	transition: 0.2s ease-in;
+	transition: 0.2s ease-out;
 }
 
-.translate_tooltip__section {
-	margin: 10px;
+.tr_t__lc {
+	position: absolute;
+	top: calc(50% - 20px);
+	left: calc(50% - 20px);
+	width: 40px;
+	height: 40px;
+}
+.tr_t__lc__l1 {
+	position: absolute;
+	width: 100%;
+	height: 100%;	
+	background-image: 
+		url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><circle id='oval' fill-opacity='0' stroke='#EC754B' stroke-width='0.5' cx='20' cy='20' r='19'></circle></svg>");
+	background-repeat: no-repeat;
+	background-size: cover;
+	animation: scale-in 1.8s ease-in infinite;
+}
+.tr_t__lc__l2 {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-image: 
+		url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><circle id='oval' fill-opacity='0' stroke='#EC754B' stroke-width='0.5' cx='20' cy='20' r='19'></circle></svg>");
+	background-repeat: no-repeat;
+	background-size: cover;
+	opacity: 0;
+	animation: scale-in 1.8s ease-in 0.6s infinite;
+}
+.tr_t__lc__l3 {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-image: 
+		url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><circle id='oval' fill-opacity='0' stroke='#EC754B' stroke-width='0.5' cx='20' cy='20' r='19'></circle></svg>");
+	background-repeat: no-repeat;
+	background-size: cover;
+	opacity: 0;
+	animation: scale-in 1.8s ease-in 1.2s infinite;
 }
 
-.translate_tooltip__sectionTitle p {
+.tr_t__section {
+	margin: 0 0 15px 0;
+	animation: fade-in 0.3s ease-in;
+}
+
+.tr_t__sectionTitle {
+	font-family: 'Fira Sans', sans-serif;
 	text-transform: uppercase;
 	font-size: 8px;
 	line-height: 1.2;
-	font-family: "lucida grande", Arial, Helvetica, sans-serif;
-	font-weight: bolder;
-	color: #73A0DB;
+	color: #EC754B;
 	margin: 0;
 	padding: 0;
 }
 
-.translate_tooltip__sectionTranslation p {
-	color: black;
+.tr_t__sectionTranslation {
+	font-family: 'Fira Sans', sans-serif;
+	color: #444444;
 	font-size: 12px;
-	font-family: "lucida grande", Arial, Helvetica, sans-serif;
 	line-height: 1.2;
 	padding: 0;
-	margin: 3px 5px 5px 7px;
+	margin: 3px 0 0 7px;
 }
 
+@keyframes fade-in {
+	0% {opacity: 0;}
+	100% {opacity: 1;}
+}
+@keyframes scale-in {
+	0% {transform: scale(0); opacity: 1;}
+	50% {opacity: 0.7;}
+	100% {transform: scale(1); opacity: 0;}
+}

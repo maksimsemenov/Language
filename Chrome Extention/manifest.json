@@ -24,20 +24,16 @@
 	
 	"permissions": [
 		"activeTab",
-		"clipboardRead",
 		"contextMenus",
-		"storage",
-		"https://*.yandex.net/"
+		"storage"
 		],
 	
-	"commands": {
-		"translate": {
-			"suggested_key": {
-				"default": "Alt+T",
-				"mac": "Alt+T"
-			},
-			"description": "Translate selected text"
+	"content_scripts": [
+		{
+			"matches": ["http://*/*"],
+			"css": ["translateTooltip.css"],
+			"js": ["translate.js"]
 		}
-	}
+	]
 }
 	
