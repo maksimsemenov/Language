@@ -7,14 +7,19 @@ document.body.addEventListener("keydown", keydownHandler, false);
 document.body.addEventListener("dblclick", dbclickHandler, false);
 
 var port = chrome.runtime.connect();
-port.onMessage.addListener(handleResponse);
+port.onMessage.addListener(handleMessage);
 
-function handleResponse(response) {
-	if (response.def && response.def.length !==0) {
-		addTranslationToTooltip(response.def);	
+function handleMessage(msg) {
+	if (msg) {
+		if (msg.type == "trResponse") {
+			addTranslationToTooltip(msg.body.def);
+		} else if (msg.type == "trRequest") {
+			createTooltipNode();
+		}
 	}
 	else {
-		console.log("Error: incorect response from server");
+		addErrorToTooltip();
+		console.log("Error: incorect response from server: ", msg);
 	}
 }
 											   
@@ -27,18 +32,18 @@ function createSectionTranslationsNode(translations) {
 	trString = trString.slice(0,1).toUpperCase() + trString.slice(1,-2);
 	
 	var sectionTranslation = document.createElement("p");
-	sectionTranslation.classList.add("translate_tooltip__sectionTranslation");
+	sectionTranslation.classList.add("tr_t__sectionTranslation");
 	sectionTranslation.appendChild(document.createTextNode(trString));
 	
 	return sectionTranslation;
 }
 function createSectionNode(section) {
 	var sectionNode = document.createElement("div");
-	sectionNode.classList.add("translate_tooltip__section");
+	sectionNode.classList.add("tr_t__section");
 	
 	if (section.pos) {
 		var sectionTitle = document.createElement("p");
-		sectionTitle.classList.add("translate_tooltip__sectionTitle");
+		sectionTitle.classList.add("tr_t__sectionTitle");
 		sectionTitle.appendChild(document.createTextNode(section.pos));
 		sectionNode.appendChild(sectionTitle);
 	}
@@ -92,6 +97,19 @@ function addTranslationToTooltip(defs) {
 		tooltipBody.appendChild(createSectionNode(def));			
 	}
 }
+function addErrorToTooltip() {
+	var tooltip = document.getElementById("translateTooltip");
+	if (!tooltip) {
+		tooltip = createTooltipNode();
+	}
+	var loader = document.getElementsByClassName("tr_t__lc")[0];
+	if (loader) {loader.parentNode.removeChild(loader);}
+	var tooltipBody = document.getElementsByClassName("tr_t__tb")[0];
+	var errNode = document.createElement("div");
+	errNode.classList.add("tr-t__errMsg");
+	errNode.appendChild(document.createTextNode(chrome.i18n.getMessage("errMsg")));
+	tooltipBody.appendChild(errNode);
+}
 
 function translate(msg) {
 	port.postMessage(msg);
@@ -119,19 +137,29 @@ function posessedTooltip(tooltip, tooltipBody) {
 	tooltip.style.left = left + "px";
 	tooltip.style.top = top + "px";
 }
+function nodeContainTarget(targetNode, node) {
+	console.log(targetNode, node);
+	if (targetNode == node) {return true;}
+	else {
+		if (targetNode.parentNode) {return nodeContainTarget(targetNode.parentNode, node);}
+		return false;
+	}
+}
 	
 function clickHandler(event) {
-	if (event.target != document.getElementById("translateTooltip") && document.getElementById("translateTooltip")) {
+	if (!nodeContainTarget(event.target, document.getElementById("translateTooltip")) && document.getElementById("translateTooltip")) {
 		document.body.removeChild(document.getElementById("translateTooltip"));
 	}
 }
-function dbclickHandler() {
-	if (window.getSelection() && window.getSelection().toString().match(/\d*/)) {
+function dbclickHandler(event) {
+	if (window.getSelection() && 
+		!window.getSelection().toString().match(/(\d+)/) &&
+		!nodeContainTarget(event.target, document.getElementById("translateTooltip"))) {
 		translate(window.getSelection().toString());
 	}
 }
 function keydownHandler(event) {
-	if (window.getSelection() && event.altKey && event.keyCode === 18) {
+	if (window.getSelection() && event.altKey && event.keyCode === 18 && !window.getSelection().toString().match(/\d*/)) {
 		translate(window.getSelection().toString());
 	}
 }

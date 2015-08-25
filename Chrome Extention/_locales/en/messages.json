@@ -1,1 +1,6 @@
-{}
+{
+	"errMsg": {
+		"message": "Sorry, we couldn't translate this",
+		"description": "Error message"
+	}	
+}
