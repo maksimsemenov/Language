@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "Linguistic": {
+      "applicationId": "TXWQTUsTbVfa2GDSzMfmaaKq3QDn7ePQIoH8qJrW"
+    },
+    "_default": {
+      "link": "Linguistic"
+    }
+  }
+}
